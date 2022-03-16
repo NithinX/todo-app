@@ -1,57 +1,41 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const date = require(__dirname + "/date.js");
 
 const app = express();
 
-const port = process.env.PORT || 3000 ;
+const port = process.env.PORT || 3000;
 
-var listarray=["Buy food","cook food","eat food"];
+let listarray = ["Buy food", "cook food", "eat food"];
+let workarray = [];
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
 app.set('view engine', 'ejs');
 
 
-app.get("/",function (req,res) {
-
-    res.render("lists",{day:displayDate(),weektype:currentDayStatus(), items:listarray});
+app.get("/", function (req, res) {
+    res.render("lists", { listTitle: date.displayTitle(), weektype: date.currentDayStatus(), items: listarray });
 });
 
+app.get("/work", function (req, res) {
+    res.render("lists", { listTitle: "work", items: workarray });
+})
 
-app.post("/",function(req,res){
-    var item = req.body.itemName;
-    listarray.push(item);
-    res.redirect("/");
-});
-
-
-
-function displayDate(){
-var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-var today  = new Date();
-
-var day = today.toLocaleDateString("en-US", options);
-
-return day;
-}
-
-
-
-function currentDayStatus(){
-    var today = new Date();
-    var currentDay = today.getDay();
-    var day="";
-    
-    if (currentDay === 6 || currentDay === 0){
-        day ="Weekend";
-    }else{
-        day = "Weekday";
+app.post("/", function (req, res) {
+    let item = req.body.itemName;
+    if (req.body.button == "work") {
+        workarray.push(item);
+        res.redirect("/work");
+    } else {
+        listarray.push(item);
+        res.redirect("/");
     }
-    return day;
-}
+});
 
-app.listen(port,function () {
-    console.log("Server started on port: "+port);
+
+app.listen(port, function () {
+    console.log("Server started on port: " + port);
 });

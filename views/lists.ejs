@@ -1,37 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("header")  -%> 
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>todo-app</title>
-</head>
+    <div class="box" id="heading">
+        <h1><%=listTitle%></h1>
+    </div>
+    
+    <div class="box">        
+        <% items.forEach(element=> { %>
+        <div class="item">
+            <input type="checkbox">
+            <p><%=element%></p>
+        </div>
+        <% }); %>                
+        
+        <form class="item" action="/" method="post">
+            <input type="text" name="itemName" placeholder="New Item" autocomplete="off">
+            <button type="submit" name="button" value=<%=listTitle%>>+</button>
+        </form>
+    </div>
 
-<body>
-    <h1>Today is <%=day%></h1>
-
-    <% if(weektype === "Weekend"){ %>
-        <h1 class="weekend"><%=weektype %></h1>
-    <% }else{ %>
-        <h1 class="weekday"><%=weektype %></h1>
-    <% } %>
-
-    <br>
-
-    <form action="/" method="post">
-        <h1>Todo list</h1>
-        <ul>
-            <% items.forEach(element=> { %>
-                <li>
-                    <%=element%>
-                </li>
-                <% }); %>
-        </ul>
-        <input type="text" name="itemName" placeholder="Enter the item">
-        <button type="submit">Add</button>
-    </form>
-</body>
-
-</html>
+ <%- include("footer")  -%> 
